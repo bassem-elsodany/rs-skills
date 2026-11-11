@@ -1,0 +1,12 @@
+# Append to Cargo.toml. rs-release / rs-performance (opt-lto-release, opt-codegen-units).
+[profile.release]
+lto = "thin"              # "fat" for final binaries where build time is irrelevant
+codegen-units = 1
+strip = "symbols"
+debug = "line-tables-only" # keep stack traces readable in crash reports; drop for smallest size
+# panic = "abort"          # services only if nothing relies on catch_unwind (and never for cdylib)
+
+[profile.release-with-debug]
+inherits = "release"
+debug = true
+strip = "none"

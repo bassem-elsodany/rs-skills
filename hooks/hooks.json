@@ -1,0 +1,66 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "(?i)(\\brust\\b|\\bcargo\\b|rustc|rustfmt|clippy|\\bmiri\\b|\\bcrate\\b|\\bcrates\\b|Cargo\\.toml|Cargo\\.lock|\\.rs\\b|E0\\d{3,4}|ownership|borrow(ing|ed|s)?\\b|borrow checker|lifetime|\\bmove(d)? value|cannot borrow|does not live long enough|mismatched types|trait bound|not satisfied|\\btrait\\b|\\bimpl\\b|generic|monomorphi|\\bdyn\\b|\\bBox<|\\bRc\\b|\\bArc\\b|\\bBox\\b|RefCell|\\bCell<|Mutex|RwLock|\\bSend\\b|\\bSync\\b|\\basync\\b|\\bawait\\b|tokio|async-std|rayon|serde|axum|actix|hyper|tonic|\\bgrpc\\b|clap\\b|\\bunsafe\\b|\\bffi\\b|extern \\\"C\\\"|bindgen|cbindgen|PyO3|\\bwasm\\b|proxy[-_]wasm|envoy filter|flex gateway|\\bpdk\\b|gateway polic(y|ies)|anyhow|thiserror|\\bResult<|\\bOption<|\\?\\s*operator|unwrap|expect\\(|panic!?\\b|no_std|embedded|microcontroller|firmware|\\bRAII\\b|\\bDrop\\b|OnceLock|LazyLock|design pattern|idiom|anti-?pattern|code smell|\\bbuilder\\b|newtype|type ?state|PhantomData|visitor pattern|strategy pattern|command pattern|interpreter pattern|fold pattern|non_exhaustive|mem::take|mem::replace|sealed trait|design contract|benchmark|criterion|proptest|mockall|doctest|tracing|observability|\\bmsrv\\b|semver|cargo-deny|cargo-audit|release build|LTO|codegen-units|supply chain|\\bproduction\\b|\\bship(ping)?\\b|rust (project|service|library|app|cli|server)|\\bports? and adapters?\\b|hexagonal|repository pattern|\\bsdk\\b|rmcp|\\bpin<|\\bunpin\\b|graceful shutdown|\\bactor\\b|macro_rules|proc-?macro|const fn|const generics|cargo sweep|\\bcleanup\\b|security review|vulnerabilit(y|ies)|threat model|\\bfuzz(ing|er)?\\b|cargo-fuzz|libfuzzer|mutation test|cargo-mutants|bisect|regression|supply chain|\\bdos\\b|denial of service|path traversal|toctou|zeroize|constant[- ]time)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/.claude/hooks/rs-skill-eval-hook.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "(?i)(\\bmcp\\b|model context protocol|\\bsdk\\b|json-?rpc|\\boauth|\\boidc\\b|\\bjwt\\b|\\bgrpc\\b|\\bprotocol\\b|\\bspec(ification)?\\b|from scratch|custom implementation|implement(ing)? (a |an |the )?\\w*[ -]?(server|client|adapter|parser)|kafka|rabbitmq|\\bnats\\b|redis|valkey|clickhouse|postgres|mysql|sqlite|sqlx|diesel|mongodb|elasticsearch|opensearch|\\bs3\\b|repositor(y|ies)|adapter|decouple|vendor lock|\\bdocker|container|compose|image build|cargo (build|test|run|clean)|disk|out of space|storage|clean ?up|\\bcommit\\b|\\bbranch\\b|\\brebase\\b|\\bmerge\\b|\\btag\\b|changelog|git |security (review|audit)|vulnerabilit(y|ies)|threat model|untrusted input|\\bfuzz|mutation test|fix (this|the) bug|reproduce|regression|supply chain|dependency (risk|audit)|\\bpr review\\b|\\bmr review\\b|code review|diff review)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/.claude/hooks/rs-skill-gates-hook.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/.claude/hooks/rs-contract-hook.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/.claude/hooks/rs-contract-bash-hook.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/.claude/hooks/rs-disk-preflight-hook.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/.claude/hooks/rs-disk-stop-hook.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

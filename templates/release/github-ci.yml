@@ -1,0 +1,61 @@
+# rs-skills release gate — GitHub Actions. Copy to .github/workflows/ci.yml.
+name: ci
+on: { push: { branches: [main] }, pull_request: {} }   # never `pull_request_target` + checkout of the PR head (runs untrusted code with secrets)
+permissions: { contents: read }                         # least privilege for GITHUB_TOKEN; widen per job only when needed
+concurrency: { group: "ci-${{ github.ref }}", cancel-in-progress: true }
+env: { CARGO_TERM_COLOR: always, RUSTFLAGS: "-Dwarnings", RUSTDOCFLAGS: "-Dwarnings", CARGO_INCREMENTAL: "0", CARGO_NET_RETRY: "3" }
+# Pin third-party actions to a full commit SHA (`uses: owner/action@<40-hex-sha>  # v4.x`) before release; tags can be moved.
+# Never interpolate `${{ github.event.* }}` (titles, branch names, bodies) into `run:` — pass through `env:` and quote. See skills/rs-release/guides/ci-hardening.md.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix: { toolchain: [stable, "1.85"] }   # stable + MSRV (keep in sync with rust-version)
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }     # don't leave the token in .git/config for later steps
+      - uses: dtolnay/rust-toolchain@master
+        with: { toolchain: "${{ matrix.toolchain }}", components: "rustfmt, clippy" }
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --all-targets --all-features --locked
+      - run: cargo test --all-targets --all-features --locked
+      - run: cargo test --no-default-features --locked
+      - run: cargo doc --no-deps --all-features --locked
+  supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: EmbarkStudios/cargo-deny-action@v2      # licences, advisories, bans, sources (deny.toml)
+  semver:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: obi1kenobi/cargo-semver-checks-action@v2  # fails the PR if the public API breaks without a major bump
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash rs-skills/scripts/contract-check.sh . && bash rs-skills/scripts/structure-check.sh . --strict
+        # vendor the two scripts from the rs-skills bundle, or install the plugin on the runner
+  # --- opt-in: short fuzz smoke per target (rs-fuzzing). Needs a nightly toolchain and `cargo install cargo-fuzz --locked`.
+  # fuzz-smoke:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 20
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with: { persist-credentials: false }
+  #     - uses: dtolnay/rust-toolchain@nightly
+  #     - run: cargo install cargo-fuzz --locked
+  #     - run: cargo fuzz run frame_parse -- -max_total_time=60 -max_len=4096 -rss_limit_mb=2048
+  # --- opt-in: weekly dependency risk report (rs-release dep-risk.py) — add `schedule: [{ cron: "17 5 * * 1" }]` to `on:`
+  # dep-risk:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with: { persist-credentials: false }
+  #     - run: python3 -I rs-skills/skills/rs-release/scripts/dep-risk.py . --out dep-risk.md

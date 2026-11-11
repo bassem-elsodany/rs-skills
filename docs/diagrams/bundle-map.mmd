@@ -1,0 +1,22 @@
+flowchart LR
+    prompt(["Your prompt<br/>or task"])
+    subgraph ENTRY["Entry"]
+        direction TB
+        router["rs-router<br/>picks the layer and the<br/>entry skill, always first"]
+        guide["rs-guide<br/>the map: load order,<br/>gates, catalogue"]
+    end
+    subgraph LAYERS["Four layers: every skill belongs to one"]
+        direction TB
+        L4["L4 DELIVERY: is it shippable, reviewable, cleaned up?<br/>style, testing, fuzzing, observability, git,<br/>review, security-review, bugfix, release, cleanup"]
+        L3["L3 DOMAIN: why is it designed this way?<br/>web, auth, policy, data, distributed, gateway,<br/>cloud-native, fintech, cli, embedded, iot, ml, systems"]
+        L2["L2 DESIGN: what pattern fits, what NOT to build?<br/>reuse-first, ports-adapters, structure, patterns,<br/>api-design, domain-model, domain-error, performance"]
+        L1["L1 MECHANICS: how do I implement it in Rust?<br/>ownership, resource, mutability, traits, type-driven,<br/>error-handling, concurrency, async-patterns, macros-const, unsafe"]
+        L4 <-->|"trace up / down"| L3
+        L3 <--> L2
+        L2 <--> L1
+    end
+    depth[("Depth, opened on demand<br/>rules, guides, templates, scripts")]
+    prompt --> router
+    guide -.-> router
+    router ==> LAYERS
+    LAYERS --> depth

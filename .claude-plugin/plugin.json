@@ -1,0 +1,34 @@
+{
+  "name": "rs-skills",
+  "version": "1.0.0",
+  "description": "Rust skill bundle for coding agents covering design to production: 62 skills in four layers, 400+ depth rules, SDK-first and ports-and-adapters gates, threat-model security review, fuzzing, bug-fix discipline, review reports by day, release and cleanup gates, and Design Contract headers in every .rs file.",
+  "author": {
+    "name": "bassem-elsodany"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rust",
+    "cargo",
+    "claude-code",
+    "agent-skills",
+    "code-review",
+    "security-review",
+    "fuzzing",
+    "ownership",
+    "async",
+    "tokio",
+    "error-handling",
+    "design-patterns",
+    "api-design",
+    "unsafe",
+    "ffi",
+    "testing",
+    "observability",
+    "release",
+    "supply-chain",
+    "hexagonal-architecture",
+    "design-contract"
+  ],
+  "homepage": "https://github.com/bassem-elsodany/rs-skills",
+  "repository": "https://github.com/bassem-elsodany/rs-skills"
+}

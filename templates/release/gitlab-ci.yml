@@ -1,0 +1,53 @@
+# rs-skills release gate — GitLab CI. Copy to .gitlab-ci.yml.
+image: rust:1.85            # MSRV image; a second job runs on rust:latest
+variables: { CARGO_HOME: "$CI_PROJECT_DIR/.cargo", RUSTFLAGS: "-Dwarnings", RUSTDOCFLAGS: "-Dwarnings" }
+cache: { key: "$CI_COMMIT_REF_SLUG", paths: [.cargo/registry, target/] }
+stages: [check, test, supply-chain, release]
+# Hardening (rs-release guides/ci-hardening.md): protect release variables (protected branches/tags only), no secrets in MR pipelines from forks,
+# pin images by digest for release jobs, `interruptible: true` on test jobs, expire artifacts.
+default: { interruptible: true, timeout: 30m }
+
+.rust: &rust
+  before_script: [rustup component add rustfmt clippy]
+
+fmt-clippy:
+  <<: *rust
+  stage: check
+  script:
+    - cargo fmt --all --check
+    - cargo clippy --all-targets --all-features --locked
+contracts:
+  stage: check
+  script:
+    - bash rs-skills/scripts/contract-check.sh .
+    - bash rs-skills/scripts/structure-check.sh . --strict
+test-msrv:
+  <<: *rust
+  stage: test
+  script:
+    - cargo test --all-targets --all-features --locked
+    - cargo test --no-default-features --locked
+    - cargo doc --no-deps --all-features --locked
+test-stable:
+  <<: *rust
+  image: rust:latest
+  stage: test
+  script: [cargo test --all-targets --all-features --locked]
+deny:
+  stage: supply-chain
+  script:
+    - cargo install cargo-deny --locked
+    - cargo deny check
+semver:
+  stage: supply-chain
+  rules: [{ if: $CI_MERGE_REQUEST_IID }]
+  script:
+    - cargo install cargo-semver-checks --locked
+    - cargo semver-checks
+release:
+  stage: release
+  rules: [{ if: $CI_COMMIT_TAG }]
+  script:
+    - cargo build --release --locked
+    - ./target/release/$CI_PROJECT_NAME --version
+  artifacts: { paths: [target/release/$CI_PROJECT_NAME] }

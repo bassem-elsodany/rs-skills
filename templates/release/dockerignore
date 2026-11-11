@@ -1,0 +1,19 @@
+# rs-cleanup: without this, `COPY . .` / the build context ships target/ (often tens or hundreds of GB) to the daemon.
+target/
+**/target/
+.git/
+.gitignore
+.github/
+.gitlab-ci.yml
+.vscode/
+.idea/
+.DS_Store
+node_modules/
+**/*.rs.bk
+*.log
+.env
+.env.*
+docs/
+rs-reviews/
+Dockerfile
+.dockerignore
