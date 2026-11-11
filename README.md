@@ -1,8 +1,13 @@
 # rs-skills
 
+[![CI](https://github.com/bassem-elsodany/rs-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/bassem-elsodany/rs-skills/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/bassem-elsodany/rs-skills)](https://github.com/bassem-elsodany/rs-skills/releases)
+
 **Rust skills for coding agents — from the first `cargo new` to a release in production.**
 
 62 skills, 400+ depth rules, 31 slash commands, helper scripts and hooks that make an agent *route before it answers*, *reuse the official SDK instead of drafting a protocol*, *decouple anything replaceable*, *review security with a threat model*, *clean up after its builds* and *leave a report a developer can follow*. Built for [Claude Code](https://claude.com/claude-code); the skills are plain Markdown, so other agents can use them too.
+
+
+*Topics: rust, claude-code, agent-skills, ai-coding-agents, codex, cursor, code-review, security-review, fuzzing, ports-and-adapters, rust-best-practices.*
 
 ```mermaid
 flowchart LR
