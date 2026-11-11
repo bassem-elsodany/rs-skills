@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4          # pin to a commit SHA before relying on this workflow
+      - uses: actions/checkout@v7          # pin to a commit SHA before relying on this workflow
         with: { persist-credentials: false }
       - name: Frontmatter, links, versions, catalogue
         run: scripts/quality-check.sh
