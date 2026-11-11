@@ -1,0 +1,9 @@
+flowchart LR
+    A["<b>DESIGN</b><br/>rs-reuse-first<br/>rs-ports-adapters<br/>rs-structure<br/><br/>/rs-sdk-scout<br/>/rs-ports-check"]
+    B["<b>BUILD</b><br/>rs-router + L1 to L3<br/>rs-design-contract<br/>rs-style<br/><br/>/rs-new-crate<br/>/rs-contract-check"]
+    C["<b>TEST</b><br/>rs-testing<br/>rs-fuzzing<br/>cargo-fuzz<br/>cargo-mutants"]
+    D["<b>REVIEW</b><br/>rs-review<br/>rs-security-review<br/>diff-review<br/><br/>/rs-review<br/>/rs-security-review<br/>/rs-diff-review"]
+    E["<b>RELEASE</b><br/>rs-release<br/>rs-git<br/>dep-risk, CI hardening<br/><br/>/rs-release-check<br/>/rs-dep-risk"]
+    F["<b>OPERATE</b><br/>rs-bugfix<br/>rs-observability<br/>rs-cleanup<br/><br/>/rs-git-check<br/>/rs-cleanup"]
+    A --> B --> C --> D --> E --> F
+    F -. "what production teaches feeds the next design" .-> A

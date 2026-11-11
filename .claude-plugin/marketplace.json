@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "rs-skills",
+  "version": "1.6.3",
+  "description": "Production-grade Rust skill bundle for coding agents (rs-*): design to production",
+  "owner": {
+    "name": "Bassem Elsodany"
+  },
+  "plugins": [
+    {
+      "name": "rs-skills",
+      "description": "62 rs-* skills for the whole Rust lifecycle: 4-layer routing, SDK-first and ports-and-adapters gates, threat-model security review, fuzzing and bug-fix discipline, 400+ depth rules, Design Contract headers, review reports by day, release and cleanup gates.",
+      "source": "./",
+      "category": "development",
+      "license": "MIT",
+      "keywords": [
+        "rust",
+        "agent-skills",
+        "code-review",
+        "security-review",
+        "release-engineering"
+      ]
+    }
+  ]
+}

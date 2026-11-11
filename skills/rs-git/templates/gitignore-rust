@@ -1,0 +1,29 @@
+# Rust
+target/
+**/target/
+**/*.rs.bk
+*.pdb
+
+# Secrets and local config (commit *.example files instead)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Tooling and OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+.cache/
+flamegraph.svg
+perf.data*
+*.profraw
+
+# Agent/local artefacts
+.claude/settings.local.json
+rs-reviews/            # private review reports (or keep them under docs/private/ and ignore that)
+
+# Keep (do NOT ignore): Cargo.lock for binaries and services, rust-toolchain.toml, deny.toml, .cargo/config.toml (project settings)

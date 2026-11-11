@@ -1,0 +1,43 @@
+name: ci
+on: { push: { branches: [main] }, pull_request: {} }
+permissions: { contents: read }
+concurrency: { group: "ci-${{ github.ref }}", cancel-in-progress: true }
+jobs:
+  bundle-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4          # pin to a commit SHA before relying on this workflow
+        with: { persist-credentials: false }
+      - name: Frontmatter, links, versions, catalogue
+        run: scripts/quality-check.sh
+      - run: scripts/rules-check.sh
+      - run: scripts/coverage-check.sh
+      - run: scripts/patterns-check.sh
+      - name: Plugin conventions (frontmatter, agents, commands, hooks, manifests, hygiene)
+        run: |
+          python3 -I scripts/validate-plugin.py --self-test
+          python3 -I scripts/validate-plugin.py .
+      - run: python3 -I scripts/gen-guide.py --check
+      - run: python3 -I scripts/gen-rule-index.py --check
+      - run: python3 tests/hook-matcher-test.py
+      - name: Shell syntax of every script and hook
+        run: |
+          for f in scripts/*.sh skills/*/scripts/*.sh .claude/hooks/*.sh; do bash -n "$f" || exit 1; done
+      - name: Python syntax
+        run: python3 -m py_compile scripts/*.py skills/*/scripts/*.py
+      - name: Installer for other agents (link, copy, uninstall) works in a temp project
+        run: |
+          T=$(mktemp -d); mkdir -p "$T/proj"; cd "$T/proj"
+          "$GITHUB_WORKSPACE/scripts/install-agents.sh" --agents-md >/dev/null
+          test -f .agents/skills/rs-router/SKILL.md && grep -q "rs-skills:start" AGENTS.md
+          "$GITHUB_WORKSPACE/scripts/install-agents.sh" --agents-md --uninstall >/dev/null
+          test -z "$(ls .agents/skills)" && ! grep -q "rs-skills:start" AGENTS.md
+          HOME="$T/home" "$GITHUB_WORKSPACE/scripts/install-agents.sh" --scope user --mode copy >/dev/null
+          test -x "$T/home/.agents/rs-skills-bundle/scripts/release-check.sh"
+      - name: JSON manifests parse
+        run: python3 -c "import json,glob;[json.load(open(f)) for f in ['metadata.json','hooks/hooks.json','.claude-plugin/plugin.json','.claude-plugin/marketplace.json']]"
+      - name: Port-check and git-check fixtures behave
+        run: |
+          python3 -I scripts/port-check.py tests/fixtures/ports/clean --strict
+          ! python3 -I scripts/port-check.py tests/fixtures/ports/leaky --strict

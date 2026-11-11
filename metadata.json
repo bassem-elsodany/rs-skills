@@ -1,0 +1,99 @@
+{
+  "name": "rs-skills",
+  "version": "1.6.3",
+  "description": "Production-grade Rust skill bundle: 4-layer routing, pattern catalogue, depth rules, Design Contract headers",
+  "author": "Bassem Elsodany",
+  "license": "MIT",
+  "phase": 5,
+  "stats": {
+    "total_skills": 62,
+    "entry": 2,
+    "layer1_mechanics": 10,
+    "layer2_design": 12,
+    "layer3_domain": 13,
+    "layer4_delivery": 11,
+    "tools": 14,
+    "agents": 11,
+    "commands": 31,
+    "rules": 402,
+    "pattern_pages": 49
+  },
+  "skills": {
+    "entry": [
+      "rs-router",
+      "rs-guide"
+    ],
+    "layer1_mechanics": [
+      "rs-ownership",
+      "rs-resource",
+      "rs-mutability",
+      "rs-traits",
+      "rs-type-driven",
+      "rs-error-handling",
+      "rs-concurrency",
+      "rs-async-patterns",
+      "rs-macros-const",
+      "rs-unsafe"
+    ],
+    "layer2_design": [
+      "rs-reuse-first",
+      "rs-ports-adapters",
+      "rs-structure",
+      "rs-patterns",
+      "rs-api-design",
+      "rs-domain-model",
+      "rs-domain-error",
+      "rs-ecosystem",
+      "rs-lifecycle",
+      "rs-performance",
+      "rs-anti-pattern",
+      "rs-mental-model"
+    ],
+    "layer3_domain": [
+      "rs-domain-web",
+      "rs-domain-auth",
+      "rs-domain-policy",
+      "rs-domain-data",
+      "rs-domain-distributed",
+      "rs-domain-gateway",
+      "rs-domain-cloud-native",
+      "rs-domain-fintech",
+      "rs-domain-cli",
+      "rs-domain-embedded",
+      "rs-domain-iot",
+      "rs-domain-ml",
+      "rs-domain-systems"
+    ],
+    "layer4_delivery": [
+      "rs-design-contract",
+      "rs-style",
+      "rs-testing",
+      "rs-fuzzing",
+      "rs-observability",
+      "rs-git",
+      "rs-review",
+      "rs-security-review",
+      "rs-bugfix",
+      "rs-release",
+      "rs-cleanup"
+    ],
+    "tools": [
+      "rs-learner",
+      "rs-daily",
+      "rs-code-navigator",
+      "rs-call-graph",
+      "rs-symbol-analyzer",
+      "rs-trait-explorer",
+      "rs-refactor-helper",
+      "rs-deps-visualizer",
+      "rs-meta-parallel",
+      "rs-skill-creator",
+      "rs-util-actionbook",
+      "rs-util-agent-browser",
+      "rs-util-dynamic-skills",
+      "rs-util-fix-skill-docs"
+    ]
+  },
+  "planned": {},
+  "last_updated": "2026-11-10"
+}

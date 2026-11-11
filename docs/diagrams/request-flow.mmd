@@ -1,0 +1,21 @@
+flowchart LR
+    subgraph IN["1. Prompt arrives"]
+        direction TB
+        u(["Your prompt"]) --> h1["Routing hook (Rust prompts)<br/>route through rs-router"]
+        h1 --> h2["Gates hook (protocol, vendor, build,<br/>security, bug, git tasks)<br/>injects the 5 gates"]
+    end
+    subgraph THINK["2. Route and reason"]
+        direction TB
+        r["rs-router picks the layer<br/>L1 error, L2 design,<br/>L3 domain, L4 delivery"] --> es["Entry skill (+ rs-domain-*)<br/>trace up and down"]
+        es --> depth["Open 2 or 3 depth files<br/>rules, guides, templates"]
+    end
+    subgraph WORK["3. The agent works"]
+        direction TB
+        w["Writes code, runs builds"] --> c1["After Write or Edit:<br/>contract hook checks<br/>the Design Contract"]
+        w --> c2["Before Bash build or docker:<br/>disk hook denies on a full disk,<br/>asks before deleting volumes"]
+    end
+    subgraph OUT["4. Before it finishes"]
+        direction TB
+        chk["L4 check: tests, review,<br/>release gate"] --> st["Stop hook asks for a Cleanup<br/>report if a disk budget is exceeded"]
+    end
+    IN --> THINK --> WORK --> OUT

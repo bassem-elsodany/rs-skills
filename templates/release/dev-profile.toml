@@ -1,0 +1,7 @@
+# Append to Cargo.toml. rs-cleanup: smaller target/ and faster dev builds. Debuggers still get line numbers and stack traces.
+[profile.dev]
+debug = "line-tables-only"   # full DWARF is the biggest single contributor to target/ size
+[profile.dev.package."*"]
+debug = false                # dependencies: no debug info at all
+[profile.test]
+debug = "line-tables-only"

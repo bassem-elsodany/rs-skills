@@ -1,0 +1,22 @@
+.DS_Store
+# local Claude settings (do not distribute)
+.claude/settings.json
+.claude/settings.local.json
+!.claude/settings.example.json
+# compile-check artifacts (Phase 3)
+checks/examples/
+checks/target/
+checks/*.json
+checks/*.err
+checks/last-run.log
+
+# Python caches, editors, OS
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+Thumbs.db
+
+# local review/disk-guard output when running the bundle's own scripts on itself
+rs-reviews/
+mutants.out/
